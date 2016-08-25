@@ -16,3 +16,5 @@ function [a,b,P1,P2,P3,P4]=prompt1()
     P4=str2num(x1{6,:});
 
 end
+
+% Test

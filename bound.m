@@ -12,3 +12,4 @@ function[K_mat,F_vec]=bound(K_mat,F_vec,bc_nodes)
 	end	
 end
 
+%penalty still to add

@@ -48,7 +48,7 @@ for i = 1:nb
 end
 hold on;
 
-%xlim([0 8])
+
 nn=(a+1)*(b+1);
 TKK=zeros(nn,2);
 

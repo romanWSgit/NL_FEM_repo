@@ -4,7 +4,7 @@ function [a,b,P1,P2,P3,P4]=prompt1()
         'Berandung P1:', 'Berandung P2:', 'Berandung P3:', 'Berandung P4:'};
     dlg_title = 'Geometrie und Netz';
     num_lines = [1 36];
-    defaultans = {'6','2','1 0','10 0','10 5','1 3'};
+    defaultans = {'6','2','1 0','10 0','10 5','1 4'};
     options.Resize = 'on';
     x1 = inputdlg(prompt,dlg_title,num_lines,defaultans,options);
 
@@ -16,5 +16,3 @@ function [a,b,P1,P2,P3,P4]=prompt1()
     P4=str2num(x1{6,:});
 
 end
-
-% Test

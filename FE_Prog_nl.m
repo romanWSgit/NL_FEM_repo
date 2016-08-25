@@ -43,7 +43,7 @@ ng_y=2;                             % 2x2 Gauss Integration
 %------------------------------------------
 % Randbedingungen
 %------------------------------------------
-[h n_RB]= size(RB_Sperre);
+[h, n_RB]= size(RB_Sperre);
 k=1;
 bc_nodes=zeros(1,2*n_RB);
 for i=1:n_RB
@@ -61,7 +61,7 @@ end
 
 F_vec=zeros(sdof,1);                % globaler Kraftvektor
 K_mat=zeros(sdof,sdof);             % globale Steifigkeitsmatrix
-
+F_int=zeros(sdof,1);
 
 %------------------------------------------
 % Belastungen
@@ -118,55 +118,118 @@ C_mat=E/(1-nu*nu)*...                   % C-Matrix (ebener Spannungszustand)
 	0 0 (1-nu)/2];		
 
 %--------------------------------------------------------
-% Schleife über alle Elemente
+% Initialisierung der Knotenverschiebungen
 %--------------------------------------------------------
 
 
+
+%--------------------------------------------------------
+% Schleife über alle Elemente
+%--------------------------------------------------------
+
+epsilon=eps; % Genauigkeit Matlab
+
+
+for ielement=1:1                    % Schleife über alle finiten Elemente
+    
+    
+    elementCoord=[TKK(EZT(ielement,1),1) TKK(EZT(ielement,1),2);...
+        TKK(EZT(ielement,2),1) TKK(EZT(ielement,2),2);...
+        TKK(EZT(ielement,3),1) TKK(EZT(ielement,3),2);...
+        TKK(EZT(ielement,4),1) TKK(EZT(ielement,4),2);];
+    
+    
+   
+	k_mat=zeros(elementDOF,elementDOF);
+    f_vec=zeros(elementDOF,1);
+    f_int=zeros(elementDOF,2);  
+    u_k=zeros(4,2);
+    
+    qi=0;
 	
-	for ix=1:ng_x
-		xi_point=point(ix,1);
-		wt_x=weight(ix,1);
-		for iy=1:ng_y
-			eta_point=point(iy,2);
-			wt_y=weight(iy,2);
-            [Nfct, dNfct_xi, dNfct_eta]=shape(xi_point,eta_point);
-			
-			F0=jacob(dNfct_xi,dNfct_eta,elementCoord); % Jacobi-Matrix
-			detF0=det(F0);
-			invF0=inv(F0);
-			
-			[dNfct_x,dNfct_y]=einheits2original(elementNodes,dNfct_xi,dNfct_eta,invF0);
-			
-            Fe=F_mat(dNfct_xi,dNfct_eta,elementCoord,invF0);
-            Ee=0.5*(Fe'*Fe-eye(2));
-            E_vec=[Ee(1,1);Ee(2,2);Ee(1,2)];
-            S_vec=C_mat*E_vec;
+	%------------------------------------------------
+	% Numerische Integration und Erstellung: K-Matrix
+	%------------------------------------------------
+       
+    for j =1:8
+        for count=1:2
+        
+            count
+            u_k
+        
+            [u_k,qj,delta]=eval_uk(j,count,epsilon,u_k);
             
-			B1=B_mat_nl(dNfct_x, dNfct_y,F0,1);
-			B2=B_mat_nl(dNfct_x, dNfct_y,F0,2);
-            B3=B_mat_nl(dNfct_x, dNfct_y,F0,3);
-            B4=B_mat_nl(dNfct_x, dNfct_y,F0,4);
-            
-            B_mat=[B1 B2 B3 B4];
-			
-			f_int=f_int + (detF0*B_mat'*S_vec*wt_x*wt_y);
-			
-		end 
-		
-	end % Ende numerische Integration
-    pos=[EZT(ielement,1)*2-1,EZT(ielement,1)*2 ...
-        EZT(ielement,2)*2-1,EZT(ielement,2)*2 ...
-        EZT(ielement,3)*2-1,EZT(ielement,3)*2 ...
-        EZT(ielement,4)*2-1,EZT(ielement,4)*2];
+            for ix=1:ng_x
+                xi_point=point(ix,1);
+                wt_x=weight(ix,1);
+                for iy=1:ng_y
+                    eta_point=point(iy,2);
+                    wt_y=weight(iy,2);
+                    [Nfct, dNfct_xi, dNfct_eta]=shape(xi_point,eta_point);
+
+                    F0=jacob(dNfct_xi,dNfct_eta,elementCoord); % Jacobi-Matrix
+                    detF0=det(F0);
+                    invF0=inv(F0);
+
+
+
+                    [Fe,dNfct_x,dNfct_y]=F_mat(elementNodes,dNfct_xi,dNfct_eta,u_k,invF0);
+                    Ee=0.5*(Fe'*Fe-eye(2));
+                    E_vec=[Ee(1,1);Ee(2,2);Ee(1,2)];
+                    S_vec=C_mat*E_vec;
+
+
+
+                    B1=B_mat_nl(elementNodes,dNfct_xi,dNfct_eta,F0,invF0,1);
+                    B2=B_mat_nl(elementNodes,dNfct_xi,dNfct_eta,F0,invF0,2);
+                    B3=B_mat_nl(elementNodes,dNfct_xi,dNfct_eta,F0,invF0,3);
+                    B4=B_mat_nl(elementNodes,dNfct_xi,dNfct_eta,F0,invF0,4);
+
+                    B_mat=[B1 B2 B3 B4];
+
+                    % interne Kräfte
+                    f_int(:,count)=f_int(:,count) + (detF0*B_mat'*S_vec*wt_x*wt_y);
+
+                end 
+
+            end % Ende numerische Integration
+        
+
+        pos=[EZT(ielement,1)*2-1,EZT(ielement,1)*2 ...
+            EZT(ielement,2)*2-1,EZT(ielement,2)*2 ...
+            EZT(ielement,3)*2-1,EZT(ielement,3)*2 ...
+            EZT(ielement,4)*2-1,EZT(ielement,4)*2];
+
+        %------------------------------------------
+        % Assemblierung
+        %------------------------------------------
+        %F_vec(pos) = F_vec(pos) + f_vec;
+        %F_int(pos) = F_int(pos) + f_int;
+
+        %K_mat=assembl(K_mat,k_mat,pos); 
+
+
+        
+        f_int
+        u_k
+        
+        end % Ende der Schleife zur Erstellung der Tangentenmatrix
+        Kt(:,j)=(f_int(:,1)-f_int(:,2))/(2*delta);
+    end % Ende der Schleife zur Erstellung der Tangentenmatrix
     
     %------------------------------------------
     % Assemblierung
     %------------------------------------------
 
+    F_vec(pos) = F_vec(pos) + f_vec;
     
 	K_mat=assembl(K_mat,k_mat,pos); 
 	
-% Ende Schleife über alle Elemente
+    
+end % Ende Schleife über alle Elemente
+
+
+
 
 %------------------------------------------
 % Randbedingungen einbauen
@@ -180,7 +243,7 @@ C_mat=E/(1-nu*nu)*...                   % C-Matrix (ebener Spannungszustand)
 
 u_vec=K_mat\F_vec;   
 
-%------------------------------------------
+%-------------------%-----------------------
 % Graphische Darstellung
 %------------------------------------------
 

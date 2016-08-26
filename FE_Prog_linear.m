@@ -75,10 +75,11 @@ K_mat=zeros(sdof,sdof);             % globale Steifigkeitsmatrix
 % Belastungen
 %------------------------------------------
 
+b
 
 
+[n_kanten, c]= size(F_Kanten);
 
-[n_kanten, b]= size(F_Kanten);
 f_check=zeros(ne,4);
 for i = 1:n_kanten
     
@@ -197,6 +198,8 @@ for ielement=1:ne                       % Schleife über alle finiten Elemente
          end
         
     end
+    
+
     
     
     

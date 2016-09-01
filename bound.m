@@ -1,6 +1,6 @@
 function[K_mat,F_vec]=bound(K_mat,F_vec,bc_nodes)
 	
-	alpha = 100000;
+	
 	for i=1:length(bc_nodes)
 		pos=bc_nodes(i);
 		for j=1:size(K_mat)

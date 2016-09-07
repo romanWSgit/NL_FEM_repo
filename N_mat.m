@@ -9,8 +9,11 @@ function [Nmat,dNmat]=N_mat(Nfct,sel)
         dNmat=[0 0 -0.5 0 0.5 0 0 0; 0 0 0 -0.5 0 0.5 0 0];
     elseif sel == 3
         dNmat=[0 0 0 0 0.5 0 -0.5 0; 0 0 0 0 0 0.5 0 -0.5];
-    else
+    elseif sel ==4
         dNmat=[-0.5 0 0 0 0 0 0.5 0; 0 -0.5 0 0 0 0 0 0.5];
+    else
+        error('Mmat error');
     end
+    
 end
 	

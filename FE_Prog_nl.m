@@ -153,10 +153,8 @@ for ielement=1:1                    % Schleife über alle finiten Elemente
        
     for j =1:8
         for count=1:2
-        
-            count
-            u_k
-        
+            count		% Ausgabe "count"
+            u_k			% Ausgabe "u_k"
             [u_k,qj,delta]=eval_uk(j,count,epsilon,u_k);
             
             for ix=1:ng_x

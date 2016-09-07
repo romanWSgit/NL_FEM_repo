@@ -14,6 +14,7 @@ clc
 %------------------------------------------
 
 
+ 
 TKKBound=[P1; P2; P3; P4];    % Rand des Gebietes
 [ne,TKK,EZT]=net_Fct(a,b,TKKBound);  % plotten des Netzes
 
@@ -75,7 +76,7 @@ K_mat=zeros(sdof,sdof);             % globale Steifigkeitsmatrix
 % Belastungen
 %------------------------------------------
 
-b
+
 
 
 [n_kanten, c]= size(F_Kanten);
@@ -173,7 +174,9 @@ for ielement=1:ne                       % Schleife über alle finiten Elemente
 	% Ermittlung des Elementslastvektors
 	%------------------------------------------
     
-    x_f=[TKK(EZT(ielement,1),:)'; TKK(EZT(ielement,2),:)'; TKK(EZT(ielement,3),:)';TKK(EZT(ielement,4),:)'];
+    x_f=[TKK(EZT(ielement,1),:)'; TKK(EZT(ielement,2),:)';...
+        TKK(EZT(ielement,3),:)';TKK(EZT(ielement,4),:)'];
+    % x_f ... Koordinaten des belasteten elements
     for ix=1:ng_x
 		xi_point=point(ix,1);
 		wt_x=weight(ix,1);
@@ -256,4 +259,5 @@ TKK_def=TKK+TKK_def;
 [ne,TKK,EZT]=net_Fct(a,b,TKKBound);  % plotten des Netzes
 
 net_Fct_def(TKKBound_def,TKK_def,EZT);  % plotten des Netzes
+
 	

@@ -6,7 +6,7 @@ clc
 %------------------------------------------
 % Eingabefenster 1 (Geometrie)
 %------------------------------------------
-[a,b,P1,P2,P3,P4]=prompt1();
+[a,b,P1,P2,P3,P4]=prompt1_linear();
 
 
 %------------------------------------------
@@ -35,7 +35,7 @@ ng_x=2;                             % 2x2 Gauss Integration
 ng_y=2;                             % 2x2 Gauss Integration
 EIy=E*(4^3)/12;
 l=10;
-q0=1000/l;
+q0=-1000;
 
 %------------------------------------------
 % Exakte Lsg.:
@@ -46,7 +46,7 @@ w_exakt=wDurch(10,l,q0,EIy)
 %------------------------------------------
 % Eingabefenster 1 (RB, Äußere Belastungen)
 %------------------------------------------
-[RB_Sperre,F_Kanten,t_x]=prompt2();
+[RB_Sperre,F_Kanten,t_x]=prompt2_linear();
 
 
 %------------------------------------------

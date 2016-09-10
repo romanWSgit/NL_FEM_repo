@@ -81,16 +81,16 @@ K_mat=zeros(sdof,sdof);             % globale Steifigkeitsmatrix
 
 [n_kanten, c]= size(F_Kanten);
 
-f_check=zeros(ne,4);
+f_check=zeros(ne,4);        % Informationen über die externen Kräfte werden in f_check gespeichert.
 for i = 1:n_kanten
     
-    [find1x,find1y]=find(EZT==F_Kanten(i,1));
-    [find2x,find2y]=find(EZT==F_Kanten(i,2));
-    f_element=intersect(find1x,find2x);
-    f_check(f_element,1)=1;
+    [find1x,find1y]=find(EZT==F_Kanten(i,1));   
+    [find2x,find2y]=find(EZT==F_Kanten(i,2));   
+    f_element=intersect(find1x,find2x);         %belastetes Element wird gefunden.      
+    f_check(f_element,1)=1;     % immer "1" ?
     f_element_pos1=find(EZT(f_element,:)==F_Kanten(i,1));
     f_element_pos2=find(EZT(f_element,:)==F_Kanten(i,2));
-    kante = 4;
+    %kante = 4;
     if     (f_element_pos1==1 && f_element_pos2==2) || (f_element_pos1==2 && f_element_pos2==1)
         kante = 1;
     elseif (f_element_pos1==2 && f_element_pos2==3) || (f_element_pos1==3 && f_element_pos2==2)
@@ -100,9 +100,9 @@ for i = 1:n_kanten
     elseif (f_element_pos1==4 && f_element_pos2==1) || (f_element_pos1==1 && f_element_pos2==4)
         kante = 4;
     end
-     f_check(f_element,2)=kante;
-     f_check(f_element,3)=t_x(i,1);
-     f_check(f_element,4)=t_x(i,2);
+     f_check(f_element,2)=kante;    % Kantennummer
+     f_check(f_element,3)=t_x(i,1); % Kraftvektor x-Komponente
+     f_check(f_element,4)=t_x(i,2); % Kraftvektor y-Komponente
 end
 
 

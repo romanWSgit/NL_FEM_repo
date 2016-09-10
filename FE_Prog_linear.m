@@ -29,7 +29,7 @@ elementNodes=4;                     % Anzahl der Knoten pro Element
 nodeDOF=2;                          % Anzahl der Freiheitsgrade pro Knoten
 sdof=nnode*nodeDOF;                 % Freiheitsgrade im System
 elementDOF=elementNodes*nodeDOF; 	% Freiheitsgrade pro Element
-E=210000;                           % E-Modul
+E=1;                           % E-Modul
 nu=0.3;                             % Poissonzahl
 ng_x=2;                             % 2x2 Gauss Integration
 ng_y=2;                             % 2x2 Gauss Integration
@@ -194,7 +194,7 @@ for ielement=1:ne                       % Schleife über alle finiten Elemente
             end
             [Nmat,dNmat]=N_mat(Nfct,f_kante);
             j_vec=dNmat*x_f;
-            j=sqrt(j_vec(1,1)^2 + j_vec(2,1)^2);
+            j=sqrt(j_vec(1,1)^2 + j_vec(2,1)^2)
             t=[f_check(ielement,3);f_check(ielement,4)];
             
             f_vec=f_vec + (j*Nmat'*t*wt_x);         % Ermittlung der Elements-f-Vektors
@@ -224,7 +224,7 @@ end % Ende Schleife über alle Elemente
 %------------------------------------------
 % Randbedingungen einbauen
 %------------------------------------------
-
+bc_nodes=[2 1 4];
 [K_mat,F_vec]=bound(K_mat,F_vec,bc_nodes); 
 
 %------------------------------------------

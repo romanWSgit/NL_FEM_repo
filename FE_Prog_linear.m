@@ -30,7 +30,7 @@ nodeDOF=2;                          % Anzahl der Freiheitsgrade pro Knoten
 sdof=nnode*nodeDOF;                 % Freiheitsgrade im System
 elementDOF=elementNodes*nodeDOF; 	% Freiheitsgrade pro Element
 E=1;                           % E-Modul
-nu=0.3;                             % Poissonzahl
+nu=1/3;                             % Poissonzahl
 ng_x=2;                             % 2x2 Gauss Integration
 ng_y=2;                             % 2x2 Gauss Integration
 EIy=E*(4^3)/12;
@@ -122,10 +122,15 @@ end
 %--------------------------------------------------------
 
 
-C_mat=E/(1-nu*nu)*...                   % C-Matrix (ebener Spannungszustand)
-	[1 nu 0;...
-	nu 1 0;...
-	0 0 (1-nu)/2];		
+% C_mat=E/(1-nu*nu)*...                   % C-Matrix (ebener Spannungszustand)
+% 	[1 nu 0;...
+% 	nu 1 0;...
+% 	0 0 (1-nu)/2];		
+
+C_mat=E/((1+nu)*(1-nu))*...             % C-Matrix (ebener Verzerrungszustand)
+	[1-nu nu 0;...
+	nu 1-nu 0;...
+	0 0 (1 - 2*nu)/2];
 
 %--------------------------------------------------------
 % Schleife über alle Elemente
@@ -224,7 +229,7 @@ end % Ende Schleife über alle Elemente
 %------------------------------------------
 % Randbedingungen einbauen
 %------------------------------------------
-bc_nodes=[2 1 4];
+%bc_nodes=[1 8 15 22 29 36 43];
 [K_mat,F_vec]=bound(K_mat,F_vec,bc_nodes); 
 
 %------------------------------------------

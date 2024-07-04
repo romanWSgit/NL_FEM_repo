@@ -4,7 +4,7 @@ function [a,b,P1,P2,P3,P4]=prompt1_linear()
         'Berandung P1:', 'Berandung P2:', 'Berandung P3:', 'Berandung P4:'};
     dlg_title = 'Geometrie und Netz';
     num_lines = [1 36];
-    defaultans = {'1','1','0 0','1 0','2 1','0 2'};
+    defaultans = {'6','6','0 0','48 44','48 60','0 44'};
     options.Resize = 'on';
     x1 = inputdlg(prompt,dlg_title,num_lines,defaultans,options);
 

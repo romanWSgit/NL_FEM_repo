@@ -6,11 +6,11 @@ A geometrically nonlinear Finite Element Method implementation in Matlab.
 
 This project features a basic implementation of a geometrically nonlinear Finite Element Method (FEM) solver using Matlab. 
 ## Screenshots
-
-<img src="./screenshots/Input_1.png" alt="Input Dialog 1" width="400"/>
+<img src="./screenshots/Mesh.png" alt="Mesh" width="600"/>
+<img src="./screenshots/deformed_mesh.png" alt="Deformed Mesh" width="600"/>
+<img src="./screenshots/Input_1.png" alt="Input Dialog 1" width="200"/>
 <img src="./screenshots/Input_2.png" alt="Input Dialog 2" width="400"/>
-<img src="./screenshots/Mesh.png" alt="Mesh" width="400"/>
-<img src="./screenshots/deformed_mesh.png" alt="Deformed Mesh" width="400"/>
+
 
 ## Resources
 
